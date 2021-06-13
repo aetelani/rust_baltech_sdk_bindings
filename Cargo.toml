@@ -1,0 +1,23 @@
+[package]
+name = "rust_baltech_sdk_bindings"
+version = "0.1.0"
+authors = ["Anssi Eteläniemi <aetelani@hotmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log-derive = "0.*"
+log = "0.*"
+thiserror = "*"
+
+[lib]
+crate-type =["cdylib"]
+
+
+[build-dependencies]
+bindgen = "0.*"
+regex = "1"
+
+[dev-dependencies]
+env_logger = "0.*"
