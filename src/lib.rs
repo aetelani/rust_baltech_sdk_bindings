@@ -52,8 +52,7 @@ mod tests {
     #[test]
     fn test_open_reader() {
         init_context();
-        // Tests works only when reader is on port COM3
-        const PORT: &str = "ttyS3";
+        const PORT: &str = env!("BALTECH_PORT");
         const PARITY_N: c_char = 78;
         const BAUDRATE: c_uint = 115200;
         const FIRMWARE_STABLE: &'static str = "1019 IDE STD   1.43.03 02/02/10 34008187";
@@ -232,7 +231,7 @@ struct DesfireAuthenticateParams(
     brp_Desfire_Authenticate_KeyDivMode,
     bool,
     Buf<brp_buf>,
-    size_t,
+    usize,
     ::std::os::raw::c_uint,
 );
 
@@ -266,13 +265,13 @@ fn desfire_select_application(context: brp_protocol, app_id: c_uint) -> BrpResul
 struct DesfireExecCommandParams(
     ::std::os::raw::c_uint,
     Buf<brp_buf>,
-    size_t,
+    usize,
     Buf<brp_buf>,
-    size_t,
+    usize,
     brp_Desfire_ExecCommand_CryptoMode,
     ::std::os::raw::c_uint,
     Buf<brp_buf>,
-    Buf<size_t>,
+    Buf<usize>,
     Buf<brp_mempool>,
 );
 
@@ -302,7 +301,7 @@ struct DesfireWriteDataParams(
     ::std::os::raw::c_uint,
     ::std::os::raw::c_uint,
     Buf<brp_buf>,
-    size_t,
+    usize,
     brp_Desfire_WriteData_Mode,
 );
 
@@ -345,7 +344,7 @@ impl Default for brp_CardFamilies {
 #[logfn(Debug)]
 fn vhl_get_serial_number(context: brp_protocol) -> BrpResult<Option<Vec<c_uchar>>> {
     let mut buf = MaybeUninit::<brp_buf>::uninit();
-    let mut size_of_serial = MaybeUninit::<size_t>::uninit();
+    let mut size_of_serial = MaybeUninit::<usize>::uninit();
     unsafe {
         let error_code = brp_VHL_GetSnr(
             context,
@@ -369,7 +368,7 @@ fn vhl_get_serial_number(context: brp_protocol) -> BrpResult<Option<Vec<c_uchar>
 #[logfn(Debug)]
 fn vhl_get_atr(context: brp_protocol) -> BrpResult<Option<Vec<c_uchar>>> {
     let mut buf: Buf<brp_buf> = Default::default();
-    let mut size_of_serial: Buf<size_t> = Default::default();
+    let mut size_of_serial: Buf<usize> = Default::default();
     unsafe {
         let error_code = brp_VHL_GetATR(
             context,

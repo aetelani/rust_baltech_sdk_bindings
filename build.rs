@@ -1,4 +1,3 @@
-#![feature(format_args_capture)]
 extern crate bindgen;
 use regex::Regex;
 use std::env;
@@ -24,8 +23,6 @@ fn main() {
         .allowlist_function("(brp_Desfire_.*|brp_VHL_.*)")
         .allowlist_var("BRP_.*")
         //.blocklist_item("IPPORT.*")
-        .clang_arg("-I/usr/include")
-        .clang_arg("-I/usr/include/x86_64-linux-gnu/")
         //.parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .generate()
         .expect("Unable to generate bindings");
