@@ -63,15 +63,17 @@ fn main() {
                 /*if ["brp_buff", "brp_mempool", "bool"].contains( &par_type) { // Special handling if needed
                     ...
                 } else ...*/
-                let _ = write!(struct_types, "{}: Buf::<{}>,\n", par_name, par_type);
                 if par_ref_count == 0_usize {
+                    let _ = write!(struct_types, "{}: Buf::<{}>,\n", par_name, par_type);
                     let _ = write!(call_pars, "p.{}.0.assume_init()\n", par_name);
                 } else if par_ref_count == 1_usize {
+                    let _ = write!(struct_types, "{}: Buf::<{}>,\n", par_name, par_type);
                     needs_mut_par = true;
                     dbg!(&new_par); //dbg!(par_ref_count); dbg!(par_type); dbg!(par_name);
                     let _ = write!(call_pars, "p.{}.0.as_mut_ptr()\n", par_name);
                 } else if par_ref_count == 2_usize {
-                    let _ = write!(call_pars, "&mut p.{}.0.as_mut_ptr() as *mut *mut {}\n", par_name, par_type);
+                    let _ = write!(struct_types, "{}: Buf::<*mut {}>,\n", par_name, par_type);
+                    let _ = write!(call_pars, "p.{}.0.as_mut_ptr() as *mut *mut {}\n", par_name, par_type);
                 } else {
                     todo!();
                 }
