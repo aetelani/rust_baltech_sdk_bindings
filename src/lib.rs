@@ -129,6 +129,17 @@ where
 
 #[logfn(Debug)]
 fn get_firmware_version(context: brp_protocol) -> BrpResult<String> {
+    let p: par_brp_Sys_GetInfo = par_brp_Sys_GetInfo {
+        protocol: Buf(MaybeUninit::new(context)),
+        Info: Buf(MaybeUninit::<*mut c_char>::uninit()), // I guess the type should be actually ptr to c_char for ffi
+        mempool: Buf(MaybeUninit::new(null_mut())),
+    };
+    let r = gen_brp_Sys_GetInfo(p);
+    unsafe {
+        // Info Does not work with c_char. Needs *c_char?
+        dbg!(CStr::from_ptr(r.as_ref().unwrap().Info.0.assume_init()).to_str().unwrap());
+        dbg!(r.as_ref().unwrap().protocol.0.assume_init());
+    }
     unsafe {
         let mut info_ptr = MaybeUninit::<*mut c_char>::uninit();
         let error_code = brp_Sys_GetInfo(context, info_ptr.as_mut_ptr(), null_mut());
