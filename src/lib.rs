@@ -1,5 +1,6 @@
 // (c) 2021 Anssi Etelaeniemi
 #![feature(min_specialization)]
+#![feature(unsafe_extern_blocks)]
 #![allow(
     nonstandard_style,
     non_snake_case,
